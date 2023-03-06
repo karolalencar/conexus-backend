@@ -1,2 +1,2 @@
 # Conexus
-Sistema que te conecta com profissionais que resolvem o seu problema.
+O sistema que te conecta com profissionais que resolvem o seu problema.
