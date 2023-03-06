@@ -15,5 +15,5 @@ import lombok.Setter;
 @Table(name = "clients")
 public class Client extends User {
 
-
+    private String temp;
 }
