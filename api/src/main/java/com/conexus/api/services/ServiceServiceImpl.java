@@ -1,4 +1,4 @@
-package com.conexus.api.services.impl;
+package com.conexus.api.services;
 
 import com.conexus.api.domain.Service;
 import com.conexus.api.repositories.ServiceRepository;
