@@ -1,1 +1,0 @@
-INSERT INTO payments (id, method, amount) VALUES (1, 'Cartão', 50);
