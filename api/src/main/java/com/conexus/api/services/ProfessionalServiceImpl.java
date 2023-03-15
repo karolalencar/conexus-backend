@@ -3,10 +3,12 @@ package com.conexus.api.services;
 import com.conexus.api.domain.Professional;
 import com.conexus.api.repositories.ProfessionalRepository;
 import com.conexus.api.services.ProfessionalService;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Service
 public class ProfessionalServiceImpl implements ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
