@@ -14,12 +14,16 @@ import lombok.Setter;
 @Table(name = "professionals")
 public class Professional extends User {
 
-    public Professional(Long id, String name, String email, String cpf, String password, String category) {
+    public Professional(Long id, String name, String email, String cpf, String password, String category, String description) {
         super(id, name, email, cpf, password);
         this.category = category;
+        this.description = description;
     }
 
     @Column
     private String category;
+
+    @Column
+    private String description;
 
 }

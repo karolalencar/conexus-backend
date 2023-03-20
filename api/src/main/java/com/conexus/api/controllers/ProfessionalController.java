@@ -1,14 +1,14 @@
 package com.conexus.api.controllers;
 
 import com.conexus.api.services.ProfessionalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@Tag(name = "Profissionais")
 @RequestMapping("professionals")
 public class ProfessionalController {
 
@@ -18,10 +18,13 @@ public class ProfessionalController {
         this.professionalService = professionalService;
     }
 
-    @GetMapping({"", "/"})
+    @Operation(summary = "Retorna a lista de todos os profissionais")
+    @GetMapping("")
     public String getProfessionals() {
         return "professionals/list";
     }
+
+
 
     @GetMapping("/{id}")
     public String getProfessional(@PathVariable("id") Long id, Model model) {
