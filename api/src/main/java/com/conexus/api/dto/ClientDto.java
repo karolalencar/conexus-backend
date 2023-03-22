@@ -1,40 +1,47 @@
-package com.conexus.api.domain;
+package com.conexus.api.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 //@Getter
 //@Setter
 //@NoArgsConstructor
 //@AllArgsConstructor
-@MappedSuperclass
-public class User extends BaseEntity {
+public class ClientDto {
+    private Long id;
 
-    public User(String name, String email, String cpf, String password) {
+    private String name;
+
+    private String email;
+
+    private String cpf;
+
+    private String password;
+
+    private String temp;
+
+    public ClientDto() {
+    }
+
+    public ClientDto(Long id, String name, String email, String cpf, String password, String temp) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.cpf = cpf;
         this.password = password;
+        this.temp = temp;
     }
 
-    public User() {
+    public Long getId() {
+        return id;
     }
 
-    @Column
-    private String name;
-
-    @Column
-    private String email;
-
-    @Column
-    private String cpf;
-
-    @Column
-    private String password;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -66,5 +73,13 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getTemp() {
+        return temp;
+    }
+
+    public void setTemp(String temp) {
+        this.temp = temp;
     }
 }

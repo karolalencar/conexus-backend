@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfessionalDTO {
+public class RatingDto {
 
     private Long id;
 
-    private String category;
+    private Double rate;
 
-    private String description;
+    private String comment;
 }

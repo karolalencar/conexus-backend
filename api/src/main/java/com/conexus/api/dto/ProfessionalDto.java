@@ -1,40 +1,37 @@
-package com.conexus.api.domain;
+package com.conexus.api.dto;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 
 //@Getter
 //@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-@MappedSuperclass
-public class User extends BaseEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class ProfessionalDto {
 
-    public User(String name, String email, String cpf, String password) {
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
-        this.password = password;
-    }
+    private Long id;
 
-    public User() {
-    }
-
-    @Column
     private String name;
 
-    @Column
     private String email;
 
-    @Column
     private String cpf;
 
-    @Column
     private String password;
+
+    private String category;
+
+    private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -66,5 +63,21 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

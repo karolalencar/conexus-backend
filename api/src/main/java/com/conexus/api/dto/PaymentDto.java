@@ -5,7 +5,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDTO {
+public class PaymentDto {
 
     private Long id;
+
+    private String method;
+
+    private Double amount;
 }
