@@ -1,8 +1,7 @@
 package com.conexus.api.services;
 
-import com.conexus.api.domain.Service;
+import com.conexus.api.domain.Services;
 import com.conexus.api.repositories.ServiceRepository;
-import com.conexus.api.services.ServiceService;
 
 
 import java.util.HashSet;
@@ -18,24 +17,24 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Set<Service> findAll() {
-        Set<Service> services = new HashSet<>();
+    public Set<Services> findAll() {
+        Set<Services> services = new HashSet<>();
         serviceRepository.findAll().forEach(services::add);
         return services;
     }
 
     @Override
-    public Service findById(Long id) {
+    public Services findById(Long id) {
         return serviceRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Service save(Service object) {
+    public Services save(Services object) {
         return serviceRepository.save(object);
     }
 
     @Override
-    public void delete(Service object) {
+    public void delete(Services object) {
         serviceRepository.delete(object);
     }
 

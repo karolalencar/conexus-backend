@@ -7,6 +7,7 @@ import com.conexus.api.services.ProfessionalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +31,6 @@ public class ProfessionalController {
     @Operation(summary = "Retorna a lista de todos os profissionais")
     @GetMapping("")
     public List<ProfessionalDto> getProfessionals() {
-        /*System.out.println("Entrou!!!!!!!!!!!!!!!!!!!!!");
-        Set<Professional> professionals = professionalService.findAll();
-        System.out.println(professionals);
-        System.out.println("Aqui!!!!!!!!!!!********");
-        return professionals.stream()
-                .map(professionalMapper::professionalToProfessionalDto)
-                .collect(Collectors.toList());*/
         List<ProfessionalDto> professionals = professionalService.findAll()
                 .stream()
                 .map(professionalMapper::professionalToProfessionalDto)
@@ -44,26 +38,18 @@ public class ProfessionalController {
         return professionals;
     }
 
-
-
+    @Operation(summary = "Retorna um profissional pelo id")
     @GetMapping("/{id}")
     public ProfessionalDto getProfessional(@PathVariable Long id) {
-        System.out.println("Aquiiiiiiiiiiiii");
         Professional professional = professionalService.findById(id);
-        System.out.println(professional);
         ProfessionalDto professionalDto = professionalMapper.professionalToProfessionalDto(professional);
         return professionalDto;
     }
 
-    @GetMapping("/register")
-    public String registerProfessional() {
-        return "professionals/registerForm";
+    @PostMapping
+    public ResponseEntity<Professional> createProfessional(@RequestBody ProfessionalDto professionalDto) {
+        Professional professional = professionalMapper.professionalDtoToProfessional(professionalDto);
+        return ResponseEntity.ok(professional);
     }
 
-    @PostMapping("/save")
-    public String saveNewProfessional() {
-
-
-        return "redirect:/professionals/list";
-    }
 }

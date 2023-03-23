@@ -1,13 +1,13 @@
 package com.conexus.api.mappers;
 
-import com.conexus.api.domain.Service;
+import com.conexus.api.domain.Services;
 import com.conexus.api.dto.ServiceDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ServiceMapper {
 
-    ServiceDto serviceToServiceDto(Service service);
+    ServiceDto serviceToServiceDto(Services service);
 
-    Service serviceDtoToService(ServiceDto serviceDto);
+    Services serviceDtoToService(ServiceDto serviceDto);
 }

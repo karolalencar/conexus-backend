@@ -1,50 +1,45 @@
-package com.conexus.api.dto;
+package com.conexus.api.domain;
 
-import com.conexus.api.domain.Client;
-import com.conexus.api.domain.Professional;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
-//@NoArgsConstructor
-//@AllArgsConstructor
 //@Getter
 //@Setter
-public class ServiceDto {
+//@NoArgsConstructor
+//@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "services")
+public class Services extends BaseEntity{
 
-    private Long id;
-
+    @Column
     private String Address;
 
+    @Column
     private String description;
 
+    @Column
     private LocalDate date;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
+    @ManyToOne
+    @JoinColumn(name = "professional_id")
     private Professional professional;
 
-    public ServiceDto() {
+    public Services() {
     }
 
-    public ServiceDto(Long id, String address, String description, LocalDate date, Client client, Professional professional) {
-        this.id = id;
+    public Services(String address, String description, LocalDate date, Client client, Professional professional) {
         Address = address;
         this.description = description;
         this.date = date;
         this.client = client;
         this.professional = professional;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAddress() {
