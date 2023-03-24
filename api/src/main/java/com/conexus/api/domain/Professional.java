@@ -6,44 +6,17 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Getter
-//@Setter
+@Setter
 @EqualsAndHashCode(callSuper = true)
-//@NoArgsConstructor
-//@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "professionals")
 public class Professional extends User {
-
-    public Professional() {
-    }
-
-    public Professional(String name, String email, String cpf, String password, String category, String description) {
-        super(name, email, cpf, password);
-        this.category = category;
-        this.description = description;
-    }
-
-
 
     @Column
     private String category;
 
     @Column
     private String description;
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class ProfessionalDto {
 
     private Long id;
