@@ -1,7 +1,7 @@
 package com.conexus.api.services;
 
-import com.conexus.api.domain.Service;
+import com.conexus.api.domain.Services;
 
-public interface ServiceService extends CrudService<Service, Long> {
+public interface ServiceService extends CrudService<Services, Long> {
 
 }

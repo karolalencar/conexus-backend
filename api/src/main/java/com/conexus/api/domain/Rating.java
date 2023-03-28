@@ -1,8 +1,6 @@
 package com.conexus.api.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -19,4 +17,11 @@ public class Rating extends BaseEntity {
 
     @Column
     private String comment;
+
+    @ManyToOne
+    private Professional professional;
+/*
+    @Column
+    @OneToOne
+    private Client client;*/
 }
