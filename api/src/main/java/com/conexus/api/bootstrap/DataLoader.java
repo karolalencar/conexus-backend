@@ -2,13 +2,14 @@ package com.conexus.api.bootstrap;
 
 import com.conexus.api.domain.Client;
 import com.conexus.api.domain.Professional;
+import com.conexus.api.domain.Rating;
 import com.conexus.api.domain.Services;
 import com.conexus.api.repositories.ClientRepository;
 import com.conexus.api.repositories.ProfessionalRepository;
+import com.conexus.api.repositories.RatingRepository;
 import com.conexus.api.repositories.ServiceRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
@@ -18,11 +19,13 @@ public class DataLoader implements CommandLineRunner {
     private final ProfessionalRepository professionalRepository;
     private final ClientRepository clientRepository;
     private final ServiceRepository serviceRepository;
+    private final RatingRepository ratingRepository;
 
-    public DataLoader(ProfessionalRepository professionalRepository, ClientRepository clientRepository, ServiceRepository serviceRepository) {
+    public DataLoader(ProfessionalRepository professionalRepository, ClientRepository clientRepository, ServiceRepository serviceRepository, RatingRepository ratingRepository) {
         this.professionalRepository = professionalRepository;
         this.clientRepository = clientRepository;
         this.serviceRepository = serviceRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     @Override
@@ -38,7 +41,6 @@ public class DataLoader implements CommandLineRunner {
         professional.setDescription("la ala lal");
         professional.setEmail("dfsaj@gfkcjdgk.com");
         professional.setPassword("fjsdklgj");
-        System.out.println(professional.getName());
         Professional savedProfessional = professionalRepository.save(professional);
 
         Client client = new Client();
@@ -47,7 +49,6 @@ public class DataLoader implements CommandLineRunner {
         client.setCpf("68542896");
         client.setPassword("123");
         client.setTemp("jhghl");
-        System.out.println(client.getName());
         Client savedClient = clientRepository.save(client);
 
         Services service = new Services();
@@ -58,5 +59,11 @@ public class DataLoader implements CommandLineRunner {
         service.setProfessional(professional);
         service.setDescription("fkjslk");
         Services savedService = serviceRepository.save(service);
+
+        Rating rating = new Rating();
+        rating.setRate(8.9);
+        rating.setComment("Executou bem o serviço");
+        rating.setProfessional(professional);
+        Rating savedRating = ratingRepository.save(rating);
     }
 }
