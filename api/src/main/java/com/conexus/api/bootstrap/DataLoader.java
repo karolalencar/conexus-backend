@@ -1,13 +1,7 @@
 package com.conexus.api.bootstrap;
 
-import com.conexus.api.domain.Client;
-import com.conexus.api.domain.Professional;
-import com.conexus.api.domain.Rating;
-import com.conexus.api.domain.Services;
-import com.conexus.api.repositories.ClientRepository;
-import com.conexus.api.repositories.ProfessionalRepository;
-import com.conexus.api.repositories.RatingRepository;
-import com.conexus.api.repositories.ServiceRepository;
+import com.conexus.api.domain.*;
+import com.conexus.api.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +14,14 @@ public class DataLoader implements CommandLineRunner {
     private final ClientRepository clientRepository;
     private final ServiceRepository serviceRepository;
     private final RatingRepository ratingRepository;
+    private final PaymentRepository paymentRepository;
 
-    public DataLoader(ProfessionalRepository professionalRepository, ClientRepository clientRepository, ServiceRepository serviceRepository, RatingRepository ratingRepository) {
+    public DataLoader(ProfessionalRepository professionalRepository, ClientRepository clientRepository, ServiceRepository serviceRepository, RatingRepository ratingRepository, PaymentRepository paymentRepository) {
         this.professionalRepository = professionalRepository;
         this.clientRepository = clientRepository;
         this.serviceRepository = serviceRepository;
         this.ratingRepository = ratingRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     @Override
@@ -34,10 +30,11 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void  loadData() {
+
         Professional professional = new Professional();
         professional.setName("Kar");
         professional.setCpf("43593859878");
-        professional.setCategory("fotográfo");
+        professional.setCategory("decorator");
         professional.setDescription("la ala lal");
         professional.setEmail("dfsaj@gfkcjdgk.com");
         professional.setPassword("fjsdklgj");
@@ -57,7 +54,6 @@ public class DataLoader implements CommandLineRunner {
         service.setDate(LocalDate.now());
         service.setClient(client);
         service.setProfessional(professional);
-        service.setDescription("fkjslk");
         Services savedService = serviceRepository.save(service);
 
         Rating rating = new Rating();
@@ -65,5 +61,17 @@ public class DataLoader implements CommandLineRunner {
         rating.setComment("Executou bem o serviço");
         rating.setProfessional(professional);
         Rating savedRating = ratingRepository.save(rating);
+
+        Rating rating2 = new Rating();
+        rating2.setRate(7.5);
+        rating2.setComment("Mais ou menos");
+        rating2.setProfessional(professional);
+        Rating savedRating2 = ratingRepository.save(rating2);
+
+        Payment payment = new Payment();
+        payment.setMethod("Credit");
+        payment.setAmount(80.0);
+        payment.setService(service);
+        Payment savedPayment = paymentRepository.save(payment);
     }
 }

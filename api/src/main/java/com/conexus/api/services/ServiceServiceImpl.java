@@ -2,12 +2,13 @@ package com.conexus.api.services;
 
 import com.conexus.api.domain.Services;
 import com.conexus.api.repositories.ServiceRepository;
+import org.springframework.stereotype.Service;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-@org.springframework.stereotype.Service
+@Service
 public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceRepository serviceRepository;
