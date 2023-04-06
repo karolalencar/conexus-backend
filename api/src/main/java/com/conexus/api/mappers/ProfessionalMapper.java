@@ -9,9 +9,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface ProfessionalMapper {
 
-    ProfessionalMapper INSTANCE = Mappers.getMapper(ProfessionalMapper.class);
-
     ProfessionalDto professionalToProfessionalDto(Professional professional);
 
+    @Mapping(target = "id", ignore = true)
     Professional professionalDtoToProfessional(ProfessionalDto professionalDto);
 }

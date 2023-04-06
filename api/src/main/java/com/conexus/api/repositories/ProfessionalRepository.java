@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface ProfessionalRepository extends CrudRepository<Professional, Long> {
 
-    List<Professional> findAllByDescription(String string);
+    List<Professional> findAllByCategory(String category);
+
+    List<Professional> findAllByDescription(String description);
 }

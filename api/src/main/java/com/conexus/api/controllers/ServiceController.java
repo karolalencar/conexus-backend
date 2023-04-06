@@ -7,10 +7,9 @@ import com.conexus.api.mappers.ServiceMapper;
 import com.conexus.api.services.ServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +37,23 @@ public class ServiceController {
         return services;
     }
 
+    @Operation(summary = "Retorna um serviço pelo id")
     @GetMapping("/{id}")
     public ServiceDto getService(@PathVariable Long id) {
         Services service = serviceService.findById(id);
         ServiceDto serviceDto = serviceMapper.serviceToServiceDto(service);
         return serviceDto;
+    }
+
+    @Operation(summary = "Cria um novo serviço")
+    @PostMapping("")
+    public ResponseEntity<?> createService(@RequestBody ServiceDto serviceDto) {
+        try {
+            Services service = serviceMapper.serviceDtoToService(serviceDto);
+            Services newService = serviceService.save(service);
+            return ResponseEntity.ok(newService);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating service: " + e.getMessage());
+        }
     }
 }

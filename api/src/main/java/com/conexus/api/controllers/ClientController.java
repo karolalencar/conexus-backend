@@ -1,6 +1,7 @@
 package com.conexus.api.controllers;
 
 import com.conexus.api.domain.Client;
+import com.conexus.api.domain.Professional;
 import com.conexus.api.dto.ClientDto;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.mappers.ClientMapper;
@@ -9,6 +10,7 @@ import com.conexus.api.services.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +46,19 @@ public class ClientController {
     public ClientDto getClient(@PathVariable Long id) {
         Client client = clientService.findById(id);
         return clientMapper.clientToClientDto(client);
+    }
+
+    @Operation(summary = "Deleta um cliente pelo id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteClient(@PathVariable Long id) {
+        Client client = clientService.findById(id);
+        if (client == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        clientService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
