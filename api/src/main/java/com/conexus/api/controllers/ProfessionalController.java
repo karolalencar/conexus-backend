@@ -35,20 +35,20 @@ public class ProfessionalController {
     }
     @Operation(summary = "Retorna a lista de todos os profissionais")
     @GetMapping("")
-    public List<ProfessionalDto> getProfessionals() {
+    public ResponseEntity<List<ProfessionalDto>> getProfessionals() {
         List<ProfessionalDto> professionals = professionalService.findAll()
                 .stream()
                 .map(professionalMapper::professionalToProfessionalDto)
                 .collect(Collectors.toList());
-        return professionals;
+        return ResponseEntity.ok().body(professionals);
     }
 
     @Operation(summary = "Retorna um profissional pelo id")
     @GetMapping("/{id}")
-    public ProfessionalDto getProfessional(@PathVariable Long id) {
+    public ResponseEntity<ProfessionalDto> getProfessional(@PathVariable Long id) {
         Professional professional = professionalService.findById(id);
         ProfessionalDto professionalDto = professionalMapper.professionalToProfessionalDto(professional);
-        return professionalDto;
+        return ResponseEntity.ok().body(professionalDto);
     }
 
     @Operation(summary = "Retorna um profissional pela categoria")

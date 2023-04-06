@@ -45,8 +45,12 @@ public class DataLoader implements CommandLineRunner {
         client.setEmail("karo@gmail.com");
         client.setCpf("68542896");
         client.setPassword("123");
-        client.setTemp("jhghl");
         Client savedClient = clientRepository.save(client);
+
+        Payment payment = new Payment();
+        payment.setMethod("Credit");
+        payment.setAmount(80.0);
+        Payment savedPayment = paymentRepository.save(payment);
 
         Services service = new Services();
         service.setAddress("Rua 2");
@@ -54,6 +58,7 @@ public class DataLoader implements CommandLineRunner {
         service.setDate(LocalDate.now());
         service.setClient(client);
         service.setProfessional(professional);
+        service.setPayment(payment);
         Services savedService = serviceRepository.save(service);
 
         Rating rating = new Rating();
@@ -67,11 +72,5 @@ public class DataLoader implements CommandLineRunner {
         rating2.setComment("Mais ou menos");
         rating2.setProfessional(professional);
         Rating savedRating2 = ratingRepository.save(rating2);
-
-        Payment payment = new Payment();
-        payment.setMethod("Credit");
-        payment.setAmount(80.0);
-        payment.setService(service);
-        Payment savedPayment = paymentRepository.save(payment);
     }
 }
