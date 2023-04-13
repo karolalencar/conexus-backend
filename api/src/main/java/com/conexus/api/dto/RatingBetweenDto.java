@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class RatingDto {
+public class RatingBetweenDto {
 
     private Long id;
 
@@ -18,5 +18,5 @@ public class RatingDto {
 
     private String comment;
 
-    private Long professionalId;
+    private Professional professional;
 }

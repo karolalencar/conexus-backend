@@ -10,6 +10,7 @@ import com.conexus.api.mappers.ServiceMapper;
 import com.conexus.api.services.ServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,8 @@ public class ServiceController {
 
     @Operation(summary = "Cria um novo serviço")
     @PostMapping("")
-    public ResponseEntity<?> createService(@RequestBody ServiceDto serviceDto) {
+    public ResponseEntity<?> createService(@Valid @RequestBody ServiceDto serviceDto) {
+
         try {
 
             Services service = serviceMapper.serviceDtoToService(serviceDto);

@@ -8,6 +8,8 @@ import com.conexus.api.services.ProfessionalService;
 import com.conexus.api.services.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,16 +45,16 @@ public class RatingController {
 
     @Operation(summary = "Cria uma nova avaliação")
     @PostMapping("")
-    public Rating createRating(@RequestBody RatingDto ratingDto) {
+    public ResponseEntity<?> createRating(@Valid @RequestBody RatingDto ratingDto) {
 
-        Long professional_id = ratingDto.getProfessional_id();
-        Professional professional = professionalService.findById(professional_id);
+        try {
 
-        Rating rating = ratingMapper.ratingDtoToRating(ratingDto);
-        rating.setProfessional(professional);
-        Rating newRating = ratingService.save(rating);
-
-        return newRating;
+            Rating rating = ratingMapper.ratingDtoToRating(ratingDto);
+            Rating newRating = ratingService.save(rating);
+            return ResponseEntity.ok(ratingMapper.ratingToRatingDto(newRating));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating rating: " + e.getMessage());
+        }
     }
 
     @Operation(summary = "Deleta uma avaliação pelo id")
