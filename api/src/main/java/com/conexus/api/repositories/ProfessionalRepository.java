@@ -1,13 +1,15 @@
 package com.conexus.api.repositories;
 
 import com.conexus.api.domain.Professional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 public interface ProfessionalRepository extends CrudRepository<Professional, Long> {
 
-    List<Professional> findAllByCategory(String category);
+    Page<Professional> findAllByCategory(String category, Pageable pageable);
 
     List<Professional> findAllByDescription(String description);
 }

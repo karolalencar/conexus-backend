@@ -14,13 +14,17 @@ public class ServiceDto {
 
     private Long id;
 
-    private String Address;
+    private String address;
 
     private String description;
 
     private LocalDate date;
 
-    private Client client;
+    private Long clientId;
 
-    private Professional professional;
+    private Long professionalId;
+
+    private Long paymentId;
+
+
 }

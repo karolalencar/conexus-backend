@@ -1,23 +1,29 @@
 package com.conexus.api.services;
 
 import com.conexus.api.domain.Professional;
-import com.conexus.api.domain.Rating;
+import com.conexus.api.dto.ProfessionalDto;
+import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.repositories.ProfessionalRepository;
-import com.conexus.api.services.ProfessionalService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfessionalServiceImpl implements ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
+    private final ProfessionalMapper professionalMapper;
 
-    public ProfessionalServiceImpl(ProfessionalRepository professionalRepository) {
+    public ProfessionalServiceImpl(ProfessionalRepository professionalRepository, ProfessionalMapper professionalMapper) {
         this.professionalRepository = professionalRepository;
+        this.professionalMapper = professionalMapper;
     }
 
     @Override
@@ -48,9 +54,10 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     }
 
     @Override
-    public List<Professional> findAllByCategory(String category) {
+    public Page<ProfessionalDto> findAllByCategory(String category, Pageable pageable) {
 
-        return professionalRepository.findAllByCategory(category);
+       Page<Professional> professionals = professionalRepository.findAllByCategory(category, pageable);
+       return professionals.map(professionalMapper::professionalToProfessionalDto);
     }
 
     @Override

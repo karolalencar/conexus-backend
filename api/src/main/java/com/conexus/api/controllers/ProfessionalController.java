@@ -1,14 +1,21 @@
 package com.conexus.api.controllers;
 
 import com.conexus.api.domain.Professional;
+import com.conexus.api.domain.Services;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.dto.RatingDto;
 import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.mappers.RatingMapper;
 import com.conexus.api.services.ProfessionalService;
 import com.conexus.api.services.RatingService;
+import com.conexus.api.services.ServiceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,22 +32,15 @@ public class ProfessionalController {
     private final RatingMapper ratingMapper;
     private final ProfessionalService professionalService;
     private final RatingService ratingService;
+    private final ServiceService serviceService;
 
 
-    public ProfessionalController(ProfessionalMapper professionalMapper, RatingMapper ratingMapper, ProfessionalService professionalService, RatingService ratingService) {
+    public ProfessionalController(ProfessionalMapper professionalMapper, RatingMapper ratingMapper, ProfessionalService professionalService, RatingService ratingService, ServiceService serviceService) {
         this.professionalMapper = professionalMapper;
         this.ratingMapper = ratingMapper;
         this.professionalService = professionalService;
         this.ratingService = ratingService;
-    }
-    @Operation(summary = "Retorna a lista de todos os profissionais")
-    @GetMapping("")
-    public ResponseEntity<List<ProfessionalDto>> getProfessionals() {
-        List<ProfessionalDto> professionals = professionalService.findAll()
-                .stream()
-                .map(professionalMapper::professionalToProfessionalDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(professionals);
+        this.serviceService = serviceService;
     }
 
     @Operation(summary = "Retorna um profissional pelo id")
@@ -51,7 +51,7 @@ public class ProfessionalController {
         return ResponseEntity.ok().body(professionalDto);
     }
 
-    @Operation(summary = "Retorna um profissional pela categoria")
+    /*@Operation(summary = "Retorna todos os profissionais de uma categoria")
     @GetMapping(params = "category")
     public List<ProfessionalDto> getAllProfessionalsByCategory(@RequestParam String category) {
         List<ProfessionalDto> professionals = professionalService.findAllByCategory(category)
@@ -59,6 +59,19 @@ public class ProfessionalController {
                 .map(professionalMapper::professionalToProfessionalDto)
                 .collect(Collectors.toList());
         return professionals;
+    }*/
+
+    @Operation(summary = "")
+    @GetMapping()
+    public ResponseEntity<Page<ProfessionalDto>> searchAllProfessionalsByCategory(
+            @RequestParam(name = "category") String category,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sort", defaultValue = "id") String sort) {
+
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+            Page<ProfessionalDto> professionals = professionalService.findAllByCategory(category, pageable);
+            return ResponseEntity.ok(professionals);
     }
 
     @Operation(summary = "Retorna um profissional pela descrição")
@@ -74,7 +87,7 @@ public class ProfessionalController {
 
     @Operation(summary = "Cria um novo profissional")
     @PostMapping("")
-    public ResponseEntity<?> createProfessional(@RequestBody ProfessionalDto professionalDto) {
+    public ResponseEntity<?> createProfessional(@Valid @RequestBody ProfessionalDto professionalDto) {
         try {
             Professional professional = professionalMapper.professionalDtoToProfessional(professionalDto);
             Professional newProfessional = professionalService.save(professional);
@@ -97,9 +110,15 @@ public class ProfessionalController {
     @Operation(summary = "Deleta um profissinal pelo id")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProfessional(@PathVariable Long id) {
+
         Professional professional = professionalService.findById(id);
         if (professional == null) {
             return ResponseEntity.notFound().build();
+        }
+
+        List<Services> servicesByProfessionalId = serviceService.findAllByProfessionalId(id);
+        for(Services service : servicesByProfessionalId){
+            service.setProfessional(null);
         }
 
         professionalService.deleteById(id);

@@ -5,8 +5,11 @@ import com.conexus.api.repositories.ServiceRepository;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceServiceImpl implements ServiceService {
@@ -42,5 +45,16 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void deleteById(Long id) {
         serviceRepository.deleteById(id);
+    }
+
+
+    @Override
+    public List<Services> findAllByProfessionalId(Long professional_id) {
+        List<Services> services = new ArrayList<>();
+        serviceRepository.findAll().forEach(services::add);
+        List<Services> servicesByProfessionalId = services.stream()
+                .filter(service-> service.getProfessional().getId() == professional_id)
+                .collect(Collectors.toList());
+        return servicesByProfessionalId;
     }
 }

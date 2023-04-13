@@ -1,5 +1,6 @@
 package com.conexus.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -19,6 +20,7 @@ public class Payment extends BaseEntity {
     @Column
     private Double amount;
 
+    @JsonIgnore
     @OneToOne
     private Services service;
 }

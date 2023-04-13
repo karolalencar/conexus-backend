@@ -1,9 +1,8 @@
 package com.conexus.api.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -15,6 +14,11 @@ import java.util.List;
 @Table(name = "clients")
 public class Client extends User {
 
-    @OneToMany(mappedBy = "client")
+    @JsonIgnore
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Services> services;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Professional> favoriteProfessionals;
+
 }

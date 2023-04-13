@@ -1,5 +1,8 @@
 package com.conexus.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +16,7 @@ import java.time.LocalDate;
 public class Services extends BaseEntity{
 
     @Column
-    private String Address;
+    private String address;
 
     @Column
     private String description;

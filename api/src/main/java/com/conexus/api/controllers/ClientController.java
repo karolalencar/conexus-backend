@@ -9,6 +9,7 @@ import com.conexus.api.repositories.ClientRepository;
 import com.conexus.api.services.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,19 @@ public class ClientController {
     public ClientDto getClient(@PathVariable Long id) {
         Client client = clientService.findById(id);
         return clientMapper.clientToClientDto(client);
+    }
+
+    @Operation(summary = "Cria um novo cliente")
+    @PostMapping("")
+    public ResponseEntity<?> createClient(@Valid @RequestBody ClientDto clientDto) {
+        try {
+            Client client = clientMapper.clientDtoToClient(clientDto);
+            Client newClient = clientService.save(client);
+            return ResponseEntity.ok(newClient);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating client: " + e.getMessage());
+        }
+
     }
 
     @Operation(summary = "Deleta um cliente pelo id")

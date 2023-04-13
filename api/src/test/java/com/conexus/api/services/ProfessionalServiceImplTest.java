@@ -30,14 +30,14 @@ class ProfessionalServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        returnProfessional = Professional.builder().build();
+        //returnProfessional = Professional.builder().build();
     }
 
     @Test
     void findAll() {
 
         Set<Professional> professionals = new HashSet<>();
-        professionals.add(Professional.builder().build());
+        //professionals.add(Professional.builder().build());
 
         Professional professional = new Professional();
         HashSet professionalsData = new HashSet<>();

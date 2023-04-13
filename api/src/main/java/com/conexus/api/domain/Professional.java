@@ -1,15 +1,14 @@
 package com.conexus.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
-//@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
 @Entity
 @Table(name = "professionals")
 public class Professional extends User {
@@ -20,10 +19,8 @@ public class Professional extends User {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "professional")
+    @JsonIgnore
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
     private List<Rating> ratings;
-
-    @ManyToOne
-    private Client client;
 
 }

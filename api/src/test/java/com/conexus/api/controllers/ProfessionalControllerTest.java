@@ -3,12 +3,16 @@ package com.conexus.api.controllers;
 import com.conexus.api.domain.Professional;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.mappers.ProfessionalMapper;
+import com.conexus.api.mappers.RatingMapper;
 import com.conexus.api.services.ProfessionalService;
+import com.conexus.api.services.RatingService;
+import com.conexus.api.services.ServiceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,12 +32,24 @@ import static org.springframework.http.RequestEntity.post;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@ExtendWith(MockitoExtension.class)
 public class ProfessionalControllerTest {
 
     @Mock
     private ProfessionalService professionalService;
 
-    ProfessionalController professionalController;
+    @Mock
+    private RatingService ratingService;
+
+    @Mock
+    private ServiceService serviceService;
+
+
+    @InjectMocks
+    private ProfessionalController professionalController;
+
+    @Mock
+    private RatingMapper ratingMapper;
 
     ProfessionalMapper professionalMapper;
 
@@ -41,7 +57,6 @@ public class ProfessionalControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        //professionalController = new ProfessionalController(professionalMapper);
     }
 
    /*public void testMockMVC() {
@@ -67,7 +82,7 @@ public class ProfessionalControllerTest {
     }*/
 
     @Test
-    public void ShouldReturnSuccess_WhenRetrieveProfessionals() {
+    public void listAllProfessionals_whenGetMethod() {
 
     }
 

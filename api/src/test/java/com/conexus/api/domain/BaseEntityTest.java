@@ -7,35 +7,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BaseEntityTest {
 
+    private BaseEntity baseEntity;
+
     @BeforeEach
-    void setUp() {
+    public void setUp() {
+        baseEntity = new BaseEntity();
     }
 
-    @Test
-    void isNew() {
-    }
 
     @Test
     void getId() {
+        baseEntity.setId(1L);
+
+        assertEquals(1L, baseEntity.getId());
     }
 
     @Test
     void setId() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
     }
 }

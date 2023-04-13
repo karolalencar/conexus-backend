@@ -17,6 +17,4 @@ public class ClientDto {
 
     private String password;
 
-    private String temp;
-
 }
