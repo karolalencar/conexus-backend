@@ -14,13 +14,19 @@ import lombok.*;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
+    public Payment(Long id, String method, Double amount) {
+        super(id);
+        this.method = method;
+        this.amount = amount;
+    }
+
     @Column
     private String method;
 
     @Column
     private Double amount;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @OneToOne
-    private Services service;
+    private Services service;*/
 }

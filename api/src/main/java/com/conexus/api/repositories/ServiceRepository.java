@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface ServiceRepository extends CrudRepository<Services, Long> {
 
-    List<Services> findAllByProfessionalId(Long professional_id);
+    //List<Services> findAllByProfessionalId(Long professionalId);
+
+    //List<Services> findAllByClientId(Long clientId);
 }

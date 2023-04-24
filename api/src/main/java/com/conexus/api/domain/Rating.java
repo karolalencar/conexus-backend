@@ -21,8 +21,6 @@ public class Rating extends BaseEntity {
     @ManyToOne
     private Professional professional;
 
-/*
-    @Column
-    @OneToOne
-    private Client client;*/
+    @ManyToOne
+    private Client client;
 }

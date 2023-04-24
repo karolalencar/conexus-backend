@@ -1,5 +1,6 @@
 package com.conexus.api.dto;
 
+import com.conexus.api.domain.Client;
 import com.conexus.api.domain.Professional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,6 @@ public class RatingBetweenDto {
     private String comment;
 
     private Professional professional;
+
+    private Client client;
 }

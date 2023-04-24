@@ -4,15 +4,14 @@ import com.conexus.api.domain.Professional;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.repositories.ProfessionalRepository;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +19,9 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
     private final ProfessionalMapper professionalMapper;
+
+    @Resource
+    private BCryptPasswordEncoder encoder;
 
     public ProfessionalServiceImpl(ProfessionalRepository professionalRepository, ProfessionalMapper professionalMapper) {
         this.professionalRepository = professionalRepository;
@@ -39,18 +41,25 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     }
 
     @Override
-    public Professional save(Professional object) {
-        return professionalRepository.save(object);
+    public Professional save(Professional professional) {
+        return professionalRepository.save(professional);
     }
 
     @Override
-    public void delete(Professional object) {
-        professionalRepository.delete(object);
+    public void delete(Professional professional) {
+        professionalRepository.delete(professional);
     }
 
     @Override
     public void deleteById(Long id) {
         professionalRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Professional> findByEmail(String email) {
+
+        List<Professional> professional = professionalRepository.findByEmail(email);
+        return professional;
     }
 
     @Override
@@ -75,5 +84,49 @@ public class ProfessionalServiceImpl implements ProfessionalService {
         }
 
         return professionalList;
+    }
+
+    @Override
+    public Professional updateByProfessionalId(Long id, Professional professional) {
+
+        professional.setId(id);
+        return professionalRepository.save(professional);
+    }
+
+    @Override
+    public Professional updateByProfessionalIdPatch(Professional professional, Professional updatedprofessional) {
+
+        updatedprofessional.setId(professional.getId());
+
+        if (updatedprofessional.getName() == null) {
+            updatedprofessional.setName(professional.getName());
+        }
+
+        if (updatedprofessional.getCpf() == null) {
+            updatedprofessional.setCpf(professional.getCpf());
+        }
+
+        if (updatedprofessional.getName() == null) {
+            updatedprofessional.setName(professional.getName());
+        }
+
+        if (updatedprofessional.getCategory() == null) {
+            updatedprofessional.setCategory(professional.getCategory());
+        }
+
+        if (updatedprofessional.getDescription() == null) {
+            updatedprofessional.setDescription(professional.getDescription());
+        }
+
+        if (updatedprofessional.getEmail() == null) {
+            updatedprofessional.setEmail(professional.getEmail());
+        }
+
+        if (updatedprofessional.getPassword() == null) {
+            updatedprofessional.setPassword(encoder.encode(professional.getPassword()));
+            System.out.println("aaaaaaaaaaaaaaaaaa");
+        }
+
+        return professionalRepository.save(updatedprofessional);
     }
 }

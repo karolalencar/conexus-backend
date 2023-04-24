@@ -51,4 +51,11 @@ public class RatingServiceImpl implements RatingService {
     public List<Rating> findAllByProfessionalId(Long id) {
         return ratingRepository.findAllByProfessionalId(id);
     }
+
+    @Override
+    public Rating updateByRatingId(Long id, Rating rating) {
+
+        rating.setId(id);
+        return ratingRepository.save(rating);
+    }
 }

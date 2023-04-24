@@ -86,6 +86,42 @@ public class ProfessionalControllerTest {
 
     }
 
+    @Test
+    void createProfessional() {
+    }
+
+    @Test
+    void getProfessionals() {
+    }
+
+    @Test
+    void getProfessional() {
+    }
+
+    @Test
+    void searchAllProfessionalsByCategory() {
+    }
+
+    @Test
+    void getAllProfessionalsByDescription() {
+    }
+
+    @Test
+    void getRatingsByProfessional() {
+    }
+
+    @Test
+    void updateProfessional() {
+    }
+
+    @Test
+    void updateProfessionalPatch() {
+    }
+
+    @Test
+    void deleteProfessional() {
+    }
+
     /*
     @Test
     public void ShouldReturnCreated_WhenCreateProfessional() throws Exception {

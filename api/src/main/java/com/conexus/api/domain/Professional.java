@@ -13,6 +13,12 @@ import java.util.List;
 @Table(name = "professionals")
 public class Professional extends User {
 
+    public Professional(Long id, String name, String email, String cpf, String password, String category, String description) {
+        super(id, name, email, cpf, password);
+        this.category = category;
+        this.description = description;
+    }
+
     @Column
     private String category;
 
@@ -22,5 +28,9 @@ public class Professional extends User {
     @JsonIgnore
     @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
     private List<Rating> ratings;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL)
+    private List<Schedule> schedules;
 
 }

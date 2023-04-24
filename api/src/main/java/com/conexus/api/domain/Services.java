@@ -1,12 +1,9 @@
 package com.conexus.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,9 +18,6 @@ public class Services extends BaseEntity{
     @Column
     private String description;
 
-    @Column
-    private LocalDate date;
-
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
@@ -34,4 +28,7 @@ public class Services extends BaseEntity{
 
     @OneToOne
     private Payment payment;
+
+    @OneToOne
+    private Schedule schedule;
 }

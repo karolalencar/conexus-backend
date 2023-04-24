@@ -44,4 +44,10 @@ public class PaymentServiceImpl implements PaymentService {
     public void deleteById(Long id) {
         paymentRepository.deleteById(id);
     }
+
+    @Override
+    public Payment updateByPaymentId(Long id, Payment payment) {
+        payment.setId(id);
+        return paymentRepository.save(payment);
+    }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 public interface RatingService extends CrudService<Rating, Long> {
 
     List<Rating> findAllByProfessionalId(Long id);
+
+    Rating updateByRatingId(Long id, Rating rating);
 }

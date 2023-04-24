@@ -33,8 +33,8 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Services save(Services object) {
-        return serviceRepository.save(object);
+    public Services save(Services services) {
+        return serviceRepository.save(services);
     }
 
     @Override
@@ -49,12 +49,29 @@ public class ServiceServiceImpl implements ServiceService {
 
 
     @Override
-    public List<Services> findAllByProfessionalId(Long professional_id) {
+    public List<Services> findAllByProfessionalId(Long professionalId) {
         List<Services> services = new ArrayList<>();
         serviceRepository.findAll().forEach(services::add);
         List<Services> servicesByProfessionalId = services.stream()
-                .filter(service-> service.getProfessional().getId() == professional_id)
+                .filter(service-> service.getProfessional().getId() == professionalId)
                 .collect(Collectors.toList());
         return servicesByProfessionalId;
+    }
+
+    @Override
+    public List<Services> findAllByClientId(Long clientId) {
+        List<Services> services = new ArrayList<>();
+        serviceRepository.findAll().forEach(services::add);
+        List<Services> servicesByClientId = services.stream()
+                .filter(service-> service.getClient().getId() == clientId)
+                .collect(Collectors.toList());
+        return servicesByClientId;
+    }
+
+    @Override
+    public Services updateByServiceId(Long id, Services service) {
+
+        service.setId(id);
+        return serviceRepository.save(service);
     }
 }

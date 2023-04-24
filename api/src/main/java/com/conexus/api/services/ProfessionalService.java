@@ -10,7 +10,13 @@ import java.util.List;
 
 public interface ProfessionalService extends CrudService<Professional, Long> {
 
+    List<Professional> findByEmail(String email);
+
     Page<ProfessionalDto> findAllByCategory(String category, Pageable pageable);
 
     List<Professional> findAllByDescription(String description);
+
+    Professional updateByProfessionalId(Long id, Professional professional);
+
+    Professional updateByProfessionalIdPatch(Professional professional, Professional updatedprofessional);
 }

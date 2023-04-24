@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,22 @@ public class RatingController {
         this.professionalService = professionalService;
     }
 
+    @Operation(summary = "Cria uma nova avaliação")
+    @PostMapping("")
+    public ResponseEntity<?> createRating(@Valid @RequestBody RatingDto ratingDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        }
+
+        Rating rating = ratingMapper.ratingDtoToRating(ratingDto);
+        Rating newRating = ratingService.save(rating);
+        return new ResponseEntity<>(ratingMapper.ratingToRatingDto(newRating), HttpStatus.CREATED);
+    }
+
     @Operation(summary = "Retorna a lista de todas as avaliações")
     @GetMapping("")
     public List<RatingDto> getRatings() {
@@ -43,18 +60,25 @@ public class RatingController {
         return ratings;
     }
 
-    @Operation(summary = "Cria uma nova avaliação")
-    @PostMapping("")
-    public ResponseEntity<?> createRating(@Valid @RequestBody RatingDto ratingDto) {
+    @Operation(summary = "Atualiza uma avaliação pelo id")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRating(@PathVariable Long id, @Valid @RequestBody RatingDto ratingDto, BindingResult result) {
 
-        try {
-
-            Rating rating = ratingMapper.ratingDtoToRating(ratingDto);
-            Rating newRating = ratingService.save(rating);
-            return ResponseEntity.ok(ratingMapper.ratingToRatingDto(newRating));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating rating: " + e.getMessage());
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
+
+        Rating rating = ratingService.findById(id);
+        if (rating == null) {
+            return new ResponseEntity<>("Rating not found", HttpStatus.NOT_FOUND);
+        }
+
+        rating = ratingMapper.ratingDtoToRating(ratingDto);
+        Rating updatedRating = ratingService.updateByRatingId(id, rating);
+        return new ResponseEntity<>(ratingMapper.ratingToRatingDto(updatedRating), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Deleta uma avaliação pelo id")
@@ -63,11 +87,10 @@ public class RatingController {
 
         Rating rating = ratingService.findById(id);
         if (rating == null) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>("Rating not found", HttpStatus.NOT_FOUND);
         }
 
         ratingService.deleteById(id);
-
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
