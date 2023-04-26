@@ -12,6 +12,16 @@ import java.time.LocalDateTime;
 @Table(name = "services")
 public class Services extends BaseEntity{
 
+    public Services(Long id, String address, String description, Client client, Professional professional, Payment payment, Schedule schedule) {
+        super(id);
+        this.address = address;
+        this.description = description;
+        this.client = client;
+        this.professional = professional;
+        this.payment = payment;
+        this.schedule = schedule;
+    }
+
     @Column
     private String address;
 

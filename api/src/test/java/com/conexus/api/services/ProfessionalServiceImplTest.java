@@ -2,6 +2,8 @@ package com.conexus.api.services;
 
 import com.conexus.api.domain.Client;
 import com.conexus.api.domain.Professional;
+import com.conexus.api.dto.ProfessionalDto;
+import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.repositories.ProfessionalRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,17 +13,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-//@ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ProfessionalServiceImplTest {
 
     public static final Long ID = 1L;
@@ -34,6 +36,9 @@ class ProfessionalServiceImplTest {
 
     @Mock
     private ProfessionalRepository professionalRepository;
+
+    @Mock
+    private ProfessionalMapper professionalMapper;
 
     @InjectMocks
     private ProfessionalServiceImpl professionalService;
@@ -65,9 +70,7 @@ class ProfessionalServiceImplTest {
         Professional response = professionalService.findById(ID);
 
         assertNotNull(response);
-
         assertEquals(Professional.class, response.getClass());
-
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
@@ -112,34 +115,68 @@ class ProfessionalServiceImplTest {
     }
 
     @Test
-    void testFindAllByCategory() {
-    }
-
-    @Test
-    void findAllByDescription() {
-    }
-
-    @Test
     void testFindByEmail() {
 
         when(professionalRepository.findByEmail(EMAIL)).thenReturn(List.of(professional));
 
-        List<Professional> response = professionalRepository.findByEmail(EMAIL);
+        List<Professional> response = professionalService.findByEmail(EMAIL);
 
         assertEquals(1, response.size());
         assertEquals(professional, response.get(0));
     }
 
     @Test
-    void testFindAllByDescription() {
-    }
+    void testFindAllByCategory() {
+     }
 
 
     @Test
+    void testFindAllByDescription() {
+
+        List<Professional> professionalList = new ArrayList<>();
+        professionalList.add(professional);
+
+        when(professionalRepository.findAll()).thenReturn(professionalList);
+
+        List<Professional> result = professionalService.findAllByDescription("test");
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
     void testUpdateByProfessionalId() {
+
+        when(professionalRepository.save(any())).thenReturn(professional);
+
+        Professional response = professionalService.updateByProfessionalId(ID, professional);
+
+        assertNotNull(response);
+        assertEquals(Professional.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(PASSWORD, response.getPassword());
+        assertEquals(CATEGORY, response.getCategory());
+        assertEquals(DESCRIPTION, response.getDescription());
+
+        verify(professionalRepository, times(1)).save(professional);
     }
 
     @Test
     void testUpdateByProfessionalIdPatch() {
+
+        Professional updatedProfessional = new Professional();
+        updatedProfessional.setName("John");
+
+        when(professionalRepository.save(any(Professional.class))).thenReturn(updatedProfessional);
+
+        Professional response = professionalService.updateByProfessionalIdPatch(professional, updatedProfessional);
+
+        assertEquals("John", response.getName());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(CATEGORY, response.getCategory());
+        assertEquals(DESCRIPTION, response.getDescription());
     }
 }

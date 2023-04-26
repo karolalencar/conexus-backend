@@ -7,35 +7,44 @@ import com.conexus.api.repositories.ProfessionalRepository;
 import com.conexus.api.repositories.RatingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RatingServiceImplTest {
+
+    public static final Long ID = 1L;
+    public static final double RATE = 8.5;
+    public static final String COMMENT = "Test comment";
 
     @Mock
     private RatingRepository ratingRepository;
-
-    @Mock
-    private ProfessionalRepository professionalRepository;
 
     @InjectMocks
     private RatingServiceImpl ratingService;
 
     private Rating rating;
 
+    private Client client;
+
+    private Professional professional;
+
     @BeforeEach
     void setUp() {
 
-        rating = new Rating(8.5, "Test comment", new Professional(), new Client());
+        client = new Client();
+        professional = new Professional();
+
+        rating = new Rating(ID, RATE, COMMENT, professional, client);
     }
 
     @Test
@@ -43,9 +52,10 @@ class RatingServiceImplTest {
 
         when(ratingRepository.findAll()).thenReturn(List.of(rating));
 
-        Set<Rating> ratings = ratingService.findAll();
+        Set<Rating> response = ratingService.findAll();
 
-        assertEquals(1, ratings.size());
+        assertNotNull(response);
+        assertEquals(1, response.size());
     }
 
     @Test
@@ -53,28 +63,77 @@ class RatingServiceImplTest {
 
         when(ratingRepository.findById(anyLong())).thenReturn(Optional.of(rating));
 
-        Rating response = ratingService.findById(1L);
+        Rating response = ratingService.findById(ID);
 
-        assertEquals(1L, rating.getId());
+        assertNotNull(response);
+        assertEquals(Rating.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(RATE, response.getRate());
+        assertEquals(COMMENT, response.getComment());
+        assertEquals(client, response.getClient());
+        assertEquals(professional, response.getProfessional());
     }
 
     @Test
     void testSave() {
+
+        when(ratingRepository.save(any())).thenReturn(rating);
+
+        Rating response = ratingService.save(rating);
+
+        assertNotNull(response);
+        assertEquals(Rating.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(RATE, response.getRate());
+        assertEquals(COMMENT, response.getComment());
+        assertEquals(client, response.getClient());
+        assertEquals(professional, response.getProfessional());
     }
 
     @Test
-    void delete() {
+    void testDelete() {
+
+        ratingService.delete(rating);
+
+        verify(ratingRepository, times(1)).delete(rating);
     }
 
     @Test
     void deleteById() {
+
+        ratingService.deleteById(ID);
+
+        verify(ratingRepository, times(1)).deleteById(ID);
     }
 
     @Test
     void findAllByProfessionalId() {
+
+        List<Rating> ratings = new ArrayList<>();
+        ratings.add(rating);
+
+        when(ratingRepository.findAllByProfessionalId(ID)).thenReturn(ratings);
+
+        List<Rating> result = ratingService.findAllByProfessionalId(ID);
+
+        assertEquals(ratings, result);
     }
 
     @Test
-    void updateByRatingId() {
+    void testUpdateByRatingId() {
+
+        when(ratingRepository.save(any())).thenReturn(rating);
+
+        Rating response = ratingService.updateByRatingId(ID, rating);
+
+        assertNotNull(response);
+        assertEquals(Rating.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(RATE, response.getRate());
+        assertEquals(COMMENT, response.getComment());
+        assertEquals(client, response.getClient());
+        assertEquals(professional, response.getProfessional());
+
+        verify(ratingRepository, times(1)).save(rating);
     }
 }

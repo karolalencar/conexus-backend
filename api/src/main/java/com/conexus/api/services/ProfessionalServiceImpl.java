@@ -1,27 +1,22 @@
 package com.conexus.api.services;
 
+import com.conexus.api.config.PasswordHasher;
 import com.conexus.api.domain.Professional;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.repositories.ProfessionalRepository;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ProfessionalServiceImpl implements ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
     private final ProfessionalMapper professionalMapper;
-
-    @Resource
-    private BCryptPasswordEncoder encoder;
 
     public ProfessionalServiceImpl(ProfessionalRepository professionalRepository, ProfessionalMapper professionalMapper) {
         this.professionalRepository = professionalRepository;
@@ -123,8 +118,7 @@ public class ProfessionalServiceImpl implements ProfessionalService {
         }
 
         if (updatedprofessional.getPassword() == null) {
-            updatedprofessional.setPassword(encoder.encode(professional.getPassword()));
-            System.out.println("aaaaaaaaaaaaaaaaaa");
+            updatedprofessional.setPassword(PasswordHasher.hashPassword(professional.getPassword()));
         }
 
         return professionalRepository.save(updatedprofessional);

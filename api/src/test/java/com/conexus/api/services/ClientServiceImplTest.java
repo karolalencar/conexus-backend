@@ -7,11 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 
 import java.util.*;
 
@@ -19,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-// @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ClientServiceImplTest {
 
     public static final Long ID = 1L;
@@ -62,9 +58,7 @@ class ClientServiceImplTest {
         Client response = clientService.findById(ID);
 
         assertNotNull(response);
-
         assertEquals(Client.class, response.getClass());
-
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
@@ -116,7 +110,7 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void updateByClientId() {
+    void testUpdateByClientId() {
 
         when(clientRepository.save(any())).thenReturn(client);
 
@@ -129,15 +123,16 @@ class ClientServiceImplTest {
         assertEquals(EMAIL, response.getEmail());
         assertEquals(CPF, response.getCpf());
         assertEquals(PASSWORD, response.getPassword());
+
+        verify(clientRepository, times(1)).save(client);
     }
 
     @Test
-    void updateByClientIdPatch() {
+    void testUpdateByClientIdPatch() {
 
         Client updatedClient = new Client();
         updatedClient.setName("John");
 
-        when(clientRepository.findById(ID)).thenReturn(Optional.of(client));
         when(clientRepository.save(any(Client.class))).thenReturn(updatedClient);
 
         Client response = clientService.updateByClientIdPatch(client, updatedClient);

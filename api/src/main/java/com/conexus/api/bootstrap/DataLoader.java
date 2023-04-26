@@ -70,14 +70,6 @@ public class DataLoader implements CommandLineRunner {
         client.setPassword(clientHashedPassword);
         Client savedClient = clientRepository.save(client);
 
-        Client clientX = new Client();
-        client.setName("Cliente X");
-        client.setEmail("cx@gmail.com");
-        client.setCpf("68542896");
-        String clientXHashedPassword = PasswordHasher.hashPassword("1223");
-        client.setPassword(clientXHashedPassword);
-        Client savedClientX = clientRepository.save(clientX);
-
         Payment payment2 = new Payment("constructor", 85.5);
         paymentRepository.save(payment2);
         Payment payment = new Payment();
@@ -99,15 +91,6 @@ public class DataLoader implements CommandLineRunner {
         service.setPayment(payment);
         service.setSchedule(schedule);
         Services savedService = serviceRepository.save(service);
-
-        Services service2 = new Services();
-        service.setAddress("Rua 20");
-        service.setDescription("Serviço 2");
-        service.setClient(clientX);
-        service.setProfessional(professionalK);
-        service.setPayment(payment);
-        service.setSchedule(schedule);
-        Services savedService2 = serviceRepository.save(service2);
 
         Rating rating = new Rating();
         rating.setRate(8.9);

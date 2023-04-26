@@ -106,15 +106,47 @@ class ClientControllerTest {
     void testUpdateClientSuccess() {
 
         when(clientService.findById(ID)).thenReturn(client);
-        when(clientMapper.clientDtoToClient(clientDto)).thenReturn(client);
+        when(clientService.updateByClientId(ID, client)).thenReturn(client);
 
         ResponseEntity<?> responseEntity = clientController.updateClient(ID, clientDto, bindingResult);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        verify(clientService, times(1)).updateByClientId(ID, client);
+        verify(clientService, times(1)).findById(ID);
     }
 
     @Test
-    void updateClientPatch() {
+    void testUpdateClientPatch() {
+
+        ClientDto clientDto = new ClientDto();
+        clientDto.setName("John Doe");
+        clientDto.setEmail("john.doe@example.com");
+        clientDto.setCpf("12345678900");
+        clientDto.setPassword("password");
+
+        Client client = new Client(ID, "Jane Doe", "jane.doe@example.com", "09876543210", "password");
+        Client updatedClient = new Client(ID, "John Doe", "john.doe@example.com", "12345678900", "password");
+        ClientDto updatedClientDto = new ClientDto();
+        updatedClientDto.setName("John Doe");
+        updatedClientDto.setEmail("john.doe@example.com");
+        updatedClientDto.setCpf("12345678900");
+
+        when(clientService.findById(ID)).thenReturn(client);
+        when(clientMapper.clientDtoToClient(clientDto)).thenReturn(updatedClient);
+        when(clientMapper.clientToClientDto(updatedClient)).thenReturn(updatedClientDto);
+        when(clientService.updateByClientIdPatch(client, updatedClient)).thenReturn(updatedClient);
+
+        // When
+        ResponseEntity<?> response = clientController.updateClientPatch(ID, clientDto);
+
+        // Then
+        verify(clientService, times(1)).findById(ID);
+        verify(clientMapper, times(1)).clientDtoToClient(clientDto);
+        verify(clientMapper, times(1)).clientToClientDto(updatedClient);
+        verify(clientService, times(1)).updateByClientIdPatch(client, updatedClient);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
     }
 
     @Test

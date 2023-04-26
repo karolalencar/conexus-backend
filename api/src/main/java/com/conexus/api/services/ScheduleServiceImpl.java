@@ -52,9 +52,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> findAllByProfessionalId(Long professionalId) {
         List<Schedule> schedules = new ArrayList<>();
         scheduleRepository.findAll().forEach(schedules::add);
+        System.out.println(schedules);
         List<Schedule> schedulesByProfessionalId = schedules.stream()
                 .filter(schedule -> schedule.getProfessional().getId() == professionalId)
                 .collect(Collectors.toList());
+
         return schedulesByProfessionalId;
     }
 

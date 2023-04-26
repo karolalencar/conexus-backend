@@ -48,7 +48,7 @@ public class PaymentController {
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable Long id) {
         Payment payment = paymentService.findById(id);
-        PaymentDto paymentDtoDto = paymentMapper.paymetToPaymentDto(payment);
+        PaymentDto paymentDtoDto = paymentMapper.paymentToPaymentDto(payment);
         return new ResponseEntity<>(paymentDtoDto, HttpStatus.OK);
     }
 
@@ -69,6 +69,6 @@ public class PaymentController {
 
         payment = paymentMapper.paymentDtoToPayment(paymentDto);
         Payment updatedPayment = paymentService.updateByPaymentId(id, payment);
-        return new ResponseEntity<>(paymentMapper.paymetToPaymentDto(updatedPayment), HttpStatus.CREATED);
+        return new ResponseEntity<>(paymentMapper.paymentToPaymentDto(updatedPayment), HttpStatus.CREATED);
     }
 }

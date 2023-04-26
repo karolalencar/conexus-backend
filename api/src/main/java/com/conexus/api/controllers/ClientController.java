@@ -127,7 +127,7 @@ public class ClientController {
 
     @Operation(summary = "Atualiza um profissional pelo id")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateClientPatch(@PathVariable Long id, @RequestBody ClientDto clientDto, BCryptPasswordEncoder encoder) {
+    public ResponseEntity<?> updateClientPatch(@PathVariable Long id, @RequestBody ClientDto clientDto) {
 
         Client client = clientService.findById(id);
         if (client == null) {

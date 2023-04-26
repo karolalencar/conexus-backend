@@ -14,6 +14,13 @@ import java.time.LocalDateTime;
 @Table(name = "schedules")
 public class Schedule extends BaseEntity {
 
+    public Schedule(Long id, LocalDateTime startService, LocalDateTime endService, Professional professional) {
+        super(id);
+        this.startService = startService;
+        this.endService = endService;
+        this.professional = professional;
+    }
+
     @Column
     LocalDateTime startService;
 
