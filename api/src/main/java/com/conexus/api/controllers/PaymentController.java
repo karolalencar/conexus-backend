@@ -44,7 +44,7 @@ public class PaymentController {
         return new ResponseEntity<>(newPayment, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Retorna a lista de pagamentos")
+    @Operation(summary = "Retorna um pagamento pelo id")
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable Long id) {
         Payment payment = paymentService.findById(id);

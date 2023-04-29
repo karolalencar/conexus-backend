@@ -38,8 +38,6 @@ class ClientControllerTest {
     @Mock
     private ClientMapper clientMapper;
 
-    private ClientRepository clientRepository;
-
     @Mock
     private BindingResult bindingResult;
 

@@ -1,10 +1,12 @@
 package com.conexus.api.controllers;
 
 import com.conexus.api.domain.Professional;
+import com.conexus.api.dto.ClientDto;
 import com.conexus.api.dto.ProfessionalDto;
 import com.conexus.api.mappers.ProfessionalMapper;
 import com.conexus.api.mappers.RatingMapper;
 import com.conexus.api.services.ProfessionalService;
+import com.conexus.api.services.ProfessionalServiceImpl;
 import com.conexus.api.services.RatingService;
 import com.conexus.api.services.ServiceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,24 +21,53 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.jboss.logging.MDC.get;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.RequestEntity.post;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class ProfessionalControllerTest {
 
+    public static final Long ID = 1L;
+    public static final String NAME = "TestName";
+    public static final String EMAIL = "test@email.com";
+    public static final String CPF = "0123456789";
+    public static final String PASSWORD = "password";
+    public static final String DESCRIPTION = "Test description";
+    public static final String CATEGORY = "teacher";
+
+    @InjectMocks
+    private ProfessionalController professionalController;
+
     @Mock
-    private ProfessionalService professionalService;
+    private ProfessionalServiceImpl professionalService;
+
+    @Mock
+    ProfessionalMapper professionalMapper;
+
+    @Mock
+    private BindingResult bindingResult;
 
     @Mock
     private RatingService ratingService;
@@ -44,94 +75,108 @@ public class ProfessionalControllerTest {
     @Mock
     private ServiceService serviceService;
 
-
-    @InjectMocks
-    private ProfessionalController professionalController;
-
     @Mock
     private RatingMapper ratingMapper;
 
-    ProfessionalMapper professionalMapper;
+    private Professional professional;
+
+    private ProfessionalDto professionalDto;
 
     @BeforeEach
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
 
+        professional = new Professional(ID, NAME, EMAIL, CPF, PASSWORD, CATEGORY, DESCRIPTION);
+        professionalDto = new ProfessionalDto(ID, NAME, EMAIL, CPF, PASSWORD, CATEGORY, DESCRIPTION);
     }
 
-   /*public void testMockMVC() {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(professionalController).build();
+    @Test
+    void testCreateProfessionalSuccess() {
 
-        mockMvc.perform(get("/professionals"))
-                .andExpect(status().isOk())
-                .andExpect(view().name())
+        when(professionalMapper.professionalDtoToProfessional(any(ProfessionalDto.class))).thenReturn(professional);
+        when(professionalService.save(any(Professional.class))).thenReturn(professional);
+
+        ResponseEntity<?> responseEntity = professionalController.createProfessional(professionalDto, bindingResult);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void testGetProfessionalsSuccess() {
+
+        when(professionalService.findAll()).thenReturn(Set.of(professional));
+
+        ResponseEntity<List<ProfessionalDto>> responseEntity = professionalController.getProfessionals();
+
+        assertNotNull(responseEntity);
+        assertNotNull(responseEntity.getBody());
+        assertEquals(ResponseEntity.class, responseEntity.getClass());
+        assertEquals(ArrayList.class, responseEntity.getBody().getClass());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(1, responseEntity.getBody().size());
+    }
+
+    @Test
+    void testGetProfessional() {
+
+        when(professionalService.findById(ID)).thenReturn(professional);
+        when(professionalMapper.professionalToProfessionalDto(professional)).thenReturn(professionalDto);
+
+        ResponseEntity<ProfessionalDto> responseEntity = professionalController.getProfessional(ID);
+
+        assertNotNull(responseEntity);
+        assertNotNull(responseEntity.getBody());
+        assertEquals(ResponseEntity.class, responseEntity.getClass());
+        assertEquals(ProfessionalDto.class, responseEntity.getBody().getClass());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        assertEquals(ID, responseEntity.getBody().getId());
+        assertEquals(NAME, responseEntity.getBody().getName());
+        assertEquals(EMAIL, responseEntity.getBody().getEmail());
+        assertEquals(CPF, responseEntity.getBody().getCpf());
+        assertEquals(PASSWORD, responseEntity.getBody().getPassword());
+        assertEquals(CATEGORY, responseEntity.getBody().getCategory());
+        assertEquals(DESCRIPTION, responseEntity.getBody().getDescription());
+    }
+
+    @Test
+    void testSearchAllProfessionalsByCategory() {
+    }
+
+    @Test
+    void testGetAllProfessionalsByDescription() {
+    }
+
+    @Test
+    void testGetRatingsByProfessional() {
+    }
+
+    /*@Test
+    void testUpdateProfessionalSuccess() {
+
+        when(professionalService.findById(ID)).thenReturn(professional);
+        when(professionalService.updateByProfessionalId(ID, professional)).thenReturn(professional);
+
+        ResponseEntity<?> responseEntity = professionalController.updateProfessional(ID, professionalDto, bindingResult);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        verify(professionalService, times(1)).updateByProfessionalId(ID, professional);
+        verify(professionalService, times(1)).findById(ID);
     }*/
 
-    /*@BeforeEach
-    public void setup() {
-        professional = Professional.builder().name("").build();
-        professionalDto = ProfessionalDto.builder().name("Ka").cpf("54065949").description("").category("").build();
-    }*/
-
-    //@Autowired
-    //private ProfessionalController professionalController;
-
-    /*@BeforeEach
-    public void setup() {
-
-    }*/
-
     @Test
-    public void listAllProfessionals_whenGetMethod() {
-
+    void testUpdateProfessionalPatch() {
     }
 
-    @Test
-    void createProfessional() {
-    }
+    /*@Test
+    void testDeleteProfessionalSuccess() {
 
-    @Test
-    void getProfessionals() {
-    }
+        when(professionalService.findById(ID)).thenReturn(professional);
 
-    @Test
-    void getProfessional() {
-    }
+        ResponseEntity<?> responseEntity = professionalController.deleteProfessional(ID);
 
-    @Test
-    void searchAllProfessionalsByCategory() {
-    }
-
-    @Test
-    void getAllProfessionalsByDescription() {
-    }
-
-    @Test
-    void getRatingsByProfessional() {
-    }
-
-    @Test
-    void updateProfessional() {
-    }
-
-    @Test
-    void updateProfessionalPatch() {
-    }
-
-    @Test
-    void deleteProfessional() {
-    }
-
-    /*
-    @Test
-    public void ShouldReturnCreated_WhenCreateProfessional() throws Exception {
-        given(professionalService.save(ArgumentMatchers.any())).willAnswer((invocation -> invocation.getArgument(0)));
-
-        ResultActions response = mockMvc.perform(post("/professionals")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(professionalDto)));
-
-        response.andExpect(MockMvcResultHandlers.status().isCreated()
-                .andDo());
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        verify(professionalService, times(1)).deleteById(ID);
     }*/
 }
